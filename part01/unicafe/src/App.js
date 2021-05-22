@@ -18,6 +18,8 @@ const App = () => {
       <Button handleClick = {tally(good, setGood)} text = "good" />
       <Button handleClick = {tally(neutral, setNeutral)} text = "neutral" />
       <Button handleClick = {tally(bad, setBad)} text = "bad" />
+      
+      <h2>Statistics</h2>
       <Statistics good = {good} neutral = {neutral} bad = {bad} />
 
     </div>
@@ -44,18 +46,19 @@ const Statistics = (props) => {
     const average = (good + (-bad)) / all
     const positive = good / all * 100
 
-  return (
-    <div>
-    <h2>Statistics</h2>
-    <Display value = {good} text = "good" />
-    <Display value = {neutral} text = "neutral" />
-    <Display value = {bad} text = "bad" />
-    <Display value = {all} text = "all" />
-    <Display value = {average} text = "average" />
-    <Display value = {positive} text = "positive" percent = "%" />
-    </div>
+  if (all >0) {
+    return (
+      <>
+      <Display value = {good} text = "good" />
+      <Display value = {neutral} text = "neutral" />
+      <Display value = {bad} text = "bad" />
+      <Display value = {all} text = "all" />
+      <Display value = {average} text = "average" />
+      <Display value = {positive} text = "positive" percent = "%" />
+      </>
     )
-  }
+  } else return <>No feedback given</>  
+}
 
 
 export default App
