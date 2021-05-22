@@ -27,7 +27,7 @@ const App = () => {
   )
 }
 
-const Display = props => (
+const Statistic = props => (
   <div>{props.text} {props.value} {props.percent}</div>
 )
 
@@ -49,12 +49,12 @@ const Statistics = (props) => {
   if (all >0) {
     return (
       <>
-      <Display value = {good} text = "good" />
-      <Display value = {neutral} text = "neutral" />
-      <Display value = {bad} text = "bad" />
-      <Display value = {all} text = "all" />
-      <Display value = {average} text = "average" />
-      <Display value = {positive} text = "positive" percent = "%" />
+      <Statistic value = {good} text = "good" />
+      <Statistic value = {neutral} text = "neutral" />
+      <Statistic value = {bad} text = "bad" />
+      <Statistic value = {all} text = "all" />
+      <Statistic value = {average} text = "average" />
+      <Statistic value = {positive} text = "positive" percent = "%" />
       </>
     )
   } else return <>No feedback given</>  
