@@ -21,15 +21,10 @@ const App = () => {
       
       <h2>Statistics</h2>
       <Statistics good = {good} neutral = {neutral} bad = {bad} />
-
     </div>
 
   )
 }
-
-const Statistic = props => (
-  <div>{props.text} {props.value} {props.percent}</div>
-)
 
 
 const Button = props => (
@@ -37,6 +32,16 @@ const Button = props => (
     {props.text}
   </button>
 )
+
+
+const Statistic = (props) => (
+  <tr>
+    <td>{props.text}</td> 
+    <td>{props.value}</td> 
+    <td>{props.percent}</td>
+  </tr>
+)
+
 
 const Statistics = (props) => {
     const good = props.good
@@ -48,14 +53,16 @@ const Statistics = (props) => {
 
   if (all >0) {
     return (
-      <>
-      <Statistic value = {good} text = "good" />
-      <Statistic value = {neutral} text = "neutral" />
-      <Statistic value = {bad} text = "bad" />
-      <Statistic value = {all} text = "all" />
-      <Statistic value = {average} text = "average" />
-      <Statistic value = {positive} text = "positive" percent = "%" />
-      </>
+      <table>
+        <tbody>
+          <Statistic value = {good} text = "good" />
+          <Statistic value = {neutral} text = "neutral" />
+          <Statistic value = {bad} text = "bad" />
+          <Statistic value = {all} text = "all" />
+          <Statistic value = {average} text = "average" />
+          <Statistic value = {positive} text = "positive" percent = "%" />
+        </tbody>
+      </table>
     )
   } else return <>No feedback given</>  
 }
