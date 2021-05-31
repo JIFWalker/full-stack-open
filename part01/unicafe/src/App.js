@@ -43,10 +43,7 @@ const Statistic = (props) => (
 )
 
 
-const Statistics = (props) => {
-    const good = props.good
-    const neutral = props.neutral
-    const bad = props.bad
+const Statistics = ({good, neutral, bad}) => {
     const all = good + neutral + bad
     const average = (good + (-bad)) / all
     const positive = good / all * 100
