@@ -23,13 +23,15 @@ const App = () => {
     setPoints(copy)
   }
 
-  
+
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <p>{anecdotes[selected]}</p>
       <p>has {points[selected]} votes</p>
       <Button handleClick = {vote(selected)} text = "Vote" />
       <Button handleClick = {random} text = "next anecdote" />
+      <Display points = {points} anecdotes = {anecdotes}/>
     </div>
   )
 }
@@ -40,7 +42,21 @@ const Button = ({handleClick, text}) => (
       {text}
     </button>
     )
- 
+
+
+const Display = ({points, anecdotes}) => {
+let top = points.indexOf(Math.max(...points))
+
+  return (
+    <div>
+      <h2>
+        Anecdote with most votes
+      </h2>
+      <p>{anecdotes[top]}</p>
+      <p>has {points[top]} votes</p>
+    </div>
+  )
+}
 
 export default App
 
