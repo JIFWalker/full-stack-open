@@ -1,16 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-const Header = ({ course }) => {
-  return (
-    <h1>{course.name}</h1>
-  )
-}
+const Header = ({ course }) => (
+  <h1>{course.name}</h1>
+)
 
 const Sum = ({course}) => {
   const count = course.map(part => part.exercises)
   const sum = count.reduce((total, exercises) => total + exercises, 0)
-
+  
   return(
     <h5>total of {sum} exercises</h5>
   ) 
@@ -30,16 +28,15 @@ const Content = ({ course }) => (
  </div>
 )
 
-
-const Course = ({course}) => {
-  return (
+const Course = ({course}) => (
   <div>
-    <Header course = {course} />
-    <Content course = {course.parts} />
-    <Sum course = {course.parts} />
+    <Header course={course} />
+    <Content course={course.parts} />
+    <Sum course={course.parts} />
   </div>
-  ) 
-}
+)
+
+
 
 const App = () => {
   const course = {
@@ -63,6 +60,7 @@ const App = () => {
       }
     ]
   }
+
 
   return <Course course={course} />
 }
