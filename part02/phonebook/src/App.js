@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 const App = () => {
   const [ persons, setPersons ] = useState([
     { name: 'Arto Hellas' },
+
   ]) 
   const [ newName, setNewName ] = useState('')
 
@@ -11,8 +12,10 @@ const App = () => {
     const personObject = {
       name : newName
     }
-    setPersons(persons.concat(personObject))
-    setNewName('')
+    persons.map(person => person.name).includes(personObject.name)
+      ? alert(`${newName} is already added to phonebook`) 
+      : setPersons(persons.concat(personObject))
+        setNewName('')
   }
 
   const handleNameChange = (event) => {
