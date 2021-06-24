@@ -20,9 +20,11 @@ const Display = ({results, handleClick}) => {
       )
       case results.length === 1:
         return (
+            <div>
         <CountryRender 
           country = {results[0]}
           />
+          </div>
         )
       default:
         return (

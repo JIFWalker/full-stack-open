@@ -4,7 +4,9 @@ import Search from './components/Search'
 import CountryRender from './components/CountryRender.js'
 import Display from './components/Display'
 
+
 const App = () => {
+
   const [ countries, setCountries ] = useState([])
   const [ searchParam, setSearchParam ] = useState('')
   const [ results, setResults ] = useState([])
@@ -13,9 +15,10 @@ useEffect(() => {
   axios
     .get('https://restcountries.eu/rest/v2/all')
     .then(response => {
-setCountries(response.data)
+      setCountries(response.data)
     })
 }, [])
+
 
 const handleSearch = (event) => {
 
