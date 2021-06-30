@@ -13,6 +13,12 @@ const App = () => {
   const [ searchParam, setSearchParam] = useState('')
   const [ isEmpty, setEmpty] = useState(true)
 
+  useEffect(() => {
+    personService
+      .getAll()
+      .then(initialPersons => {setPersons(initialPersons)
+    })
+  }, [])   
 
   const handleNameChange = (event) => (
     setNewName(event.target.value)
@@ -28,12 +34,12 @@ const App = () => {
       : setEmpty(true)
   }
 
-  useEffect(() => {
-    personService
-      .getAll()
-      .then(initialPersons => {setPersons(initialPersons)
-    })
-  }, [persons])    
+  const confirmDelete = (person) => {
+    if (window.confirm(`Delete ${person.name}?`)) {
+      personService.remove(person.id)
+      setPersons(persons.filter(entry => 
+        entry.id !== person.id))}
+  }
 
 
   const display = isEmpty
@@ -91,6 +97,7 @@ const App = () => {
       
       <PersonsRender 
         display = {display} 
+        confirmDelete = {confirmDelete}
       /> 
     </div>
   )
