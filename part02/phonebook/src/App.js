@@ -41,6 +41,15 @@ const App = () => {
         entry.id !== person.id))}
   }
 
+  const updateNumber = (personObject) => {
+    if (window.confirm(`${newName} is already added to phonebook, 
+    replace the old number with a new one?`)) {
+      personService.update(personObject.id, personObject)
+      setPersons(persons.map(person => {
+        return person.id === personObject.id ? personObject : person
+      }))
+    }
+  }
 
   const display = isEmpty
     ? persons
@@ -55,13 +64,18 @@ const App = () => {
       number : newNum,
       id: newName
     }
+    const containsName = persons.map(person => person.name).includes(personObject.name)
+    const containsNum = persons.map(person => person.number).includes(personObject.number)
     switch (true) {
-      case persons.map(person => person.name).includes(personObject.name):
+      case containsName && !containsNum:
+        updateNumber(personObject)
+      break
+      case containsName:
         alert(`${newName} is already added to phonebook`)
-        break
-      case persons.map(person => person.number).includes(personObject.number):
+      break
+      case containsNum:
         alert(`${newNum} is already added to phonebook`)
-        break
+      break
       default:
        personService
         .create(personObject)
