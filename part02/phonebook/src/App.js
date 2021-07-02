@@ -3,6 +3,7 @@ import PersonsRender from './components/PersonsRender'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import personService from './services/Person'
+import Notification from './components/Notification'
 
 
 
@@ -12,6 +13,7 @@ const App = () => {
   const [ newNum, setNewNum ] = useState('')
   const [ searchParam, setSearchParam] = useState('')
   const [ isEmpty, setEmpty] = useState(true)
+  const [notification, setNotification] = useState(null)
 
   useEffect(() => {
     personService
@@ -38,7 +40,9 @@ const App = () => {
     if (window.confirm(`Delete ${person.name}?`)) {
       personService.remove(person.id)
       setPersons(persons.filter(entry => 
-        entry.id !== person.id))}
+        entry.id !== person.id))
+      setNotification(`${person.name} has been deleted from phonebook`)
+    }
   }
 
   const updateNumber = (personObject) => {
@@ -46,10 +50,13 @@ const App = () => {
     replace the old number with a new one?`)) {
       personService.update(personObject.id, personObject)
       setPersons(persons.map(person => {
+        setNotification(`${personObject.name}'s number has been updated`)
         return person.id === personObject.id ? personObject : person
       }))
     }
   }
+
+
 
   const display = isEmpty
     ? persons
@@ -71,16 +78,17 @@ const App = () => {
         updateNumber(personObject)
       break
       case containsName:
-        alert(`${newName} is already added to phonebook`)
+        setNotification(`${newName} is already in the phonebook`)
       break
       case containsNum:
-        alert(`${newNum} is already added to phonebook`)
+        setNotification(`${newNum} is already in the phonebook`)
       break
       default:
        personService
         .create(personObject)
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
+          setNotification(`${personObject.name} has been added to the phonebook`)
         })
     }
     setNewName('')
@@ -91,7 +99,10 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      
+      <Notification 
+        message = {notification} 
+        setNotification = {setNotification}
+      />
       <Filter 
         searchParam = {searchParam}
         handleSearch = {handleSearch}
