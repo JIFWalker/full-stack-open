@@ -38,19 +38,23 @@ const App = () => {
 
   const confirmDelete = (person) => {
     if (window.confirm(`Delete ${person.name}?`)) {
-      personService.remove(person.id)
+      personService
+        .remove(person.id)
+        .then(setNotification(`${person.name} has been deleted from phonebook`))
+        .catch(error => setNotification(`${person.name} has already been deleted from phonebook`))
       setPersons(persons.filter(entry => 
         entry.id !== person.id))
-      setNotification(`${person.name} has been deleted from phonebook`)
     }
   }
 
   const updateNumber = (personObject) => {
     if (window.confirm(`${newName} is already added to phonebook, 
     replace the old number with a new one?`)) {
-      personService.update(personObject.id, personObject)
-      setPersons(persons.map(person => {
-        setNotification(`${personObject.name}'s number has been updated`)
+      personService
+      .update(personObject.id, personObject)
+      .then(setNotification(`${personObject.name}'s number has been updated`))
+      .catch(error => setNotification(`${personObject.name} has already been deleted from phonebook`))
+      setPersons(persons.map(person => { 
         return person.id === personObject.id ? personObject : person
       }))
     }

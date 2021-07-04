@@ -4,7 +4,6 @@ const Notification = ({ message, setNotification}) => {
     if (message === null) {
       return null
     }
-    console.log('message', message)
     setTimeout(() => {
         setNotification(null)
     }, 5000)
