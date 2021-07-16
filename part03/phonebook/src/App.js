@@ -6,7 +6,6 @@ import personService from './services/Person'
 import Notification from './components/Notification'
 
 
-
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
   const [ newName, setNewName ] = useState('')
@@ -52,12 +51,11 @@ const App = () => {
     replace the old number with a new one?`)) {
       personService
       .update(personObject.id, personObject)
-      .then(setPersons(persons.map(person => 
-        personObject.id === person.id ? personObject : person
-      )))
       .then(setNotification(`${personObject.name}'s number has been updated`))
       .catch(error => setNotification(error.response.data.error))
-      .then(setPersons(persons))
+      setPersons(persons.map(person => 
+        personObject.id === person.id ? personObject : person
+      ))
     }
   }
 
