@@ -53,7 +53,7 @@ const App = () => {
       personService
       .update(personObject.id, personObject)
       .then(setNotification(`${personObject.name}'s number has been updated`))
-      .catch(error => setNotification(`${personObject.name} has already been deleted from phonebook`))
+      .catch(error => setNotification(error.response.data.error))
       setPersons(persons.map(person => 
         personObject.id === person.id ? personObject : person
       ))
@@ -76,27 +76,24 @@ const App = () => {
     }
     const containsName = persons.map(person => person.name).includes(personObject.name)
     const containsNum = persons.map(person => person.number).includes(personObject.number)
-    switch (true) {
-      case containsName && !containsNum:
+
+     if (containsName && !containsNum) {
         persons.map(person => {
           if (person.name === personObject.name) {
             personObject.id = person.id
           } return null
         })
         updateNumber(personObject)
-      break
-      case containsName:
-        setNotification(`${newName} is already in the phonebook`)
-      break
-      case containsNum:
-        setNotification(`${newNum} is already in the phonebook`)
-      break
-      default:
+      } else {
        personService
         .create(personObject)
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
           setNotification(`${personObject.name} has been added to the phonebook`)
+        })
+        .catch(error => {
+          setNotification(error.response.data.error)
+          console.log(error.response.data)
         })
     }
     setNewName('')
