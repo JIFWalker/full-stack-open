@@ -52,11 +52,12 @@ const App = () => {
     replace the old number with a new one?`)) {
       personService
       .update(personObject.id, personObject)
+      .then(setPersons(persons.map(person => 
+        personObject.id === person.id ? personObject : person
+      )))
       .then(setNotification(`${personObject.name}'s number has been updated`))
       .catch(error => setNotification(error.response.data.error))
-      setPersons(persons.map(person => 
-        personObject.id === person.id ? personObject : person
-      ))
+      .then(setPersons(persons))
     }
   }
 
