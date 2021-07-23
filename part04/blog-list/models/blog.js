@@ -1,17 +1,5 @@
 const mongoose = require('mongoose')
 
-const mongoUrl = process.env.MONGODB_URI
-
-console.log('connecting to', mongoUrl)
-
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
-    .then(result => {
-        console.log('connected to MongoDB')
-    })
-    .catch(error => {
-        console.log('error connecting to MondgoDB:', error.message)
-    })
-
 const blogSchema = new mongoose.Schema({
     title: String,
     author: String,
@@ -27,4 +15,4 @@ const blogSchema = new mongoose.Schema({
     }
 })
 
-  module.exports = mongoose.model('Blog', blogSchema)
+module.exports = mongoose.model('Blog', blogSchema)
