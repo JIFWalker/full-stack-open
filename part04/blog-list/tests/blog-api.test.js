@@ -43,15 +43,8 @@ const initialBlogs =  [
     //     url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
     //     likes: 0,
     //     __v: 0
-    // },
-    // {
-    //     _id: '5a422bc61b54a676234d17fc',
-    //     title: 'Type wars',
-    //     author: 'Robert C. Martin',
-    //     url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
-    //     likes: 2,
-    //     __v: 0
     // }
+
 ]
 
 beforeEach(async () => {
@@ -76,14 +69,28 @@ test('blogs are returned as json', async () => {
 })
 
 test('blog unique ID is named "id"', async () => {
-    await api
-        .get('/api/blogs')
-        .expect(200)
-        .expect('Content-Type', /application\/json/)
-
     const response = await api.get('/api/blogs')
     response.body.map(blog => expect(blog).toHaveProperty('id'))
 
+})
+
+test('HTTP POST request creates new blog post', async () => {
+    const newBlog = {
+        _id: '5a422bc61b54a676234d17fc',
+        title: 'Spice & Wolf',
+        author: 'Holo',
+        url: 'http://blog.spicenadwolf.com',
+        likes: 666,
+        __v: 0
+    }
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+    const response = await api.get('/api/blogs')
+    expect(response.body).toHaveLength(initialBlogs.length + 1)
 })
 
 
