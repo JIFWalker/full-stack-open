@@ -75,6 +75,17 @@ test('blogs are returned as json', async () => {
     console.log(`there are ${response.body.length} blogs`)
 })
 
+test('blog unique ID is named "id"', async () => {
+    await api
+        .get('/api/blogs')
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+    const response = await api.get('/api/blogs')
+    response.body.map(blog => expect(blog).toHaveProperty('id'))
+
+})
+
 
 afterAll(() => {
     mongoose.connection.close()
