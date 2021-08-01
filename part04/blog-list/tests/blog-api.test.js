@@ -58,7 +58,19 @@ test('"likes" property is not missing from the request', async () => {
     blogs.body.map(blog => expect(blog).toHaveProperty('likes'))
 })
 
+test('verified request with missing title and url properties returns 400', async () => {
+    const newBlog = {
+        _id: '5a422bc61b54a676234d17fc',
+        author: 'Holo',
+        likes: 666,
+        __v: 0
+    }
 
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(400)
+})
 afterAll(() => {
     mongoose.connection.close()
 })

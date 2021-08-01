@@ -4,7 +4,12 @@ const Blog = require('../models/blog')
 
 blogsRouter.get('/', async (request, response) => {
     const blog = await Blog.find({})
-    response.json(blog)
+
+    if (blog) {
+        response.json(blog)
+    } else {
+        response.status(400).end()
+    }
 })
 
 blogsRouter.post('/', async (request, response) => {
@@ -16,11 +21,13 @@ blogsRouter.post('/', async (request, response) => {
         url: body.url,
         likes: body.likes || 0
     })
-
-
-    const savedBlog = await blog.save()
-    response.status(201).json(savedBlog)
-    console.log('added following to database', savedBlog)
+    if (blog.title === undefined || blog.url === undefined) {
+        await response.status(400).end()
+    } else {
+        const savedBlog = await blog.save()
+        response.status(201).json(savedBlog)
+        console.log('added following to database', savedBlog)
+    }
 })
 
 module.exports = blogsRouter
