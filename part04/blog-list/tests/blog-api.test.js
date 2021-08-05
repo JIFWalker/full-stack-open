@@ -5,15 +5,19 @@ const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
 
+// const blogObjects = helper.initialBlogs
+// .map(blog => new Blog(blog))
+// const promiseArray = blogObjects.map(blog => blog.save())
+// await Promise.all(promiseArray)
+
 
 beforeEach(async () => {
     await Blog.deleteMany({})
-    console.log('database cleared')
 
-    const blogObjects = helper.initialBlogs
-        .map(blog => new Blog(blog))
-    const promiseArray = blogObjects.map(blog => blog.save())
-    await Promise.all(promiseArray)
+    for (let blog of helper.initialBlogs) {
+        let blogObject = new Blog(blog)
+        await blogObject.save()
+    }
     console.log('database initialization complete')
 })
 
@@ -35,7 +39,7 @@ describe('when there is some blogs alredy saved', () => {
         const response = await api.get('/api/blogs')
         response.body.map(blog => expect(blog).toHaveProperty('id'))
 
-})
+    })
 })
 
 describe('when making a POST request', () => {
@@ -79,7 +83,7 @@ describe('when making a POST request', () => {
     })
 })
 
-describe('when deleting a specific blog entry', () => {
+describe('when manipulating a specific blog entry', () => {
     test('delete single blog entry from database', async () => {
         const blogsAtStart = await helper.blogsInDb()
         const blogToDelete = blogsAtStart[0]
