@@ -5,12 +5,6 @@ const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
 
-// const blogObjects = helper.initialBlogs
-// .map(blog => new Blog(blog))
-// const promiseArray = blogObjects.map(blog => blog.save())
-// await Promise.all(promiseArray)
-
-
 beforeEach(async () => {
     await Blog.deleteMany({})
 
