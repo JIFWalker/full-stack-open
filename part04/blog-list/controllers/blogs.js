@@ -22,7 +22,7 @@ blogsRouter.post('/', async (request, response) => {
         likes: body.likes || 0
     })
     if (!blog.title || !blog.url) {
-        await response.status(400).end()
+        return response.status(400).end()
     } else {
         const savedBlog = await blog.save()
         response.status(201).json(savedBlog)
