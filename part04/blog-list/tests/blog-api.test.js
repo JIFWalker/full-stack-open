@@ -4,6 +4,7 @@ const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 beforeEach(async () => {
     await Blog.deleteMany({})
@@ -12,7 +13,6 @@ beforeEach(async () => {
         let blogObject = new Blog(blog)
         await blogObject.save()
     }
-    console.log('database initialization complete')
 })
 
 describe('when there is some blogs alredy saved', () => {
@@ -21,12 +21,10 @@ describe('when there is some blogs alredy saved', () => {
             .get('/api/blogs')
             .expect(200)
             .expect('Content-Type', /application\/json/)
-        console.log('blog is in JSON format')
 
         const response = await api.get('/api/blogs')
 
         expect(response.body).toHaveLength(helper.initialBlogs.length)
-        console.log(`there are ${response.body.length} blogs`)
     })
 
     test('blog unique ID is named "id"', async () => {
@@ -44,7 +42,7 @@ describe('when making a POST request', () => {
             author: 'Holo',
             url: 'http://blog.spicenadwolf.com',
             likes: 666,
-            __v: 0
+            userId: '611434d04995b298a47da3fc'
         }
         await api
             .post('/api/blogs')
@@ -67,7 +65,7 @@ describe('when making a POST request', () => {
             _id: '5a422bc61b54a676234d17fc',
             author: 'Holo',
             likes: 666,
-            __v: 0
+            userId: '611434d04995b298a47da3fc'
         }
 
         await api
