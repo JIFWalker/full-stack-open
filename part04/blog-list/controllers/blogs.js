@@ -26,7 +26,6 @@ blogsRouter.get('/', async (request, response) => {
 
 blogsRouter.post('/', async (request, response) => {
     const body = request.body
-    console.log(body)
     const token = getTokenFrom(request)
     const decodedToken = jwt.verify(token, process.env.SECRET)
     if (!token || !decodedToken.id) {
@@ -51,7 +50,6 @@ blogsRouter.post('/', async (request, response) => {
         await user.save()
 
         response.status(201).json(savedBlog)
-        console.log('added following to database', savedBlog)
     }
 })
 
