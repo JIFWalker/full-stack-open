@@ -11,9 +11,9 @@ beforeEach(async () => {
 
     const passwordHash = await bcrypt.hash('sekret', 10)
     const user = new User({ username: 'WiseWolf', name: 'Holo', passwordHash, 
-    _id: '611434d04995b298a47da3fc', blogs: ['5a422a851b54a676234d17f7', '5a422b3a1b54a666634d17f9'] })
+        _id: '611434d04995b298a47da3fc', blogs: ['5a422a851b54a676234d17f7', '5a422b3a1b54a666634d17f9'] })
     const user2 = new User({ username: 'HelpfulFox', name: 'Senko', passwordHash, 
-    _id: '6115929244749cb242399fb0', blogs: ['5a422b3a1b54a676234d17f9', '5a422b891b54a676234d17fa', '5a422ba71b54a676234d17fb']})
+        _id: '6115929244749cb242399fb0', blogs: ['5a422b3a1b54a676234d17f9', '5a422b891b54a676234d17fa', '5a422ba71b54a676234d17fb']})
 
     await user.save()
     await user2.save()
