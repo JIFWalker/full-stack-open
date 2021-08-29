@@ -2,7 +2,7 @@
 import React from 'react'
 
 
-const BlogRender = ({ blogs, Blog, user }) => {
+const BlogRender = ({ blogs, Blog, user, handleLogout }) => {
     if (!blogs[0].id) {
         return (
             <div>
@@ -15,9 +15,10 @@ const BlogRender = ({ blogs, Blog, user }) => {
             <div>
                 <h2>blogs</h2>
 
-                <div>{user} logged in</div>
-
-                <br></br>
+                <p>
+                    {user} logged in
+                    <button onClick = {handleLogout}>logout</button>
+                </p>
 
                 {blogs.map(blog =>
                     <Blog key = {blog.id} blog = {blog} />
