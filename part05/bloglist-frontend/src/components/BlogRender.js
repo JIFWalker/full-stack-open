@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
 import React from 'react'
+import AddBlog from './AddBlog'
 
 
-const BlogRender = ({ blogs, Blog, user, handleLogout }) => {
+const BlogRender = ({ blogs, Blog, user, handleLogout, setBlog, newBlog, createBlog }) => {
     if (!blogs[0].id) {
         return (
             <div>
@@ -19,10 +20,19 @@ const BlogRender = ({ blogs, Blog, user, handleLogout }) => {
                     {user} logged in
                     <button onClick = {handleLogout}>logout</button>
                 </p>
+                <div>
+                    <AddBlog
+                        setBlog={setBlog}
+                        newBlog={newBlog}
+                        createBlog={createBlog}
+                    />
+                </div>
 
-                {blogs.map(blog =>
-                    <Blog key = {blog.id} blog = {blog} />
-
+                {blogs.map(blog => {
+                    console.log('blog.id', blog.title, blog.id)
+                    return (
+                        <Blog key = {blog.id} blog = {blog} />)
+                }
                 )}
 
             </div>

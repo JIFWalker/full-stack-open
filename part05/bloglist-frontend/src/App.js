@@ -12,12 +12,14 @@ const App = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [user, setUser] = useState(null)
+    const [newBlog, setNewBlog] = useState({
+        title: '',
+        author: '',
+        url: '',
+    })
 
     useEffect(() => {
-        blogService
-            .getAll().then(initialBlogs => {
-                setBlogs( initialBlogs )
-            })
+        updateData()
     }, [])
 
     useEffect(() => {
@@ -28,6 +30,13 @@ const App = () => {
             blogService.setToken(user.token)
         }
     }, [])
+
+    const updateData = () => {
+        blogService
+            .getAll().then(initialBlogs => {
+                setBlogs( initialBlogs )
+            })
+    }
 
     const handleLogin = async (event) => {
         event.preventDefault()
@@ -58,13 +67,41 @@ const App = () => {
         }
     }
 
-    const passwordSetter = (pass) => {
-        setPassword(pass)
+    const createBlog = async (event) => {
+        event.preventDefault()
+        try {
+            await blogService.create(newBlog)
+            let updatedBlog = blogs.concat(newBlog)
+
+            setBlogs(updatedBlog)
+            setNewBlog({
+                title: '',
+                author: '',
+                url: '',
+            })
+        } catch (error) {
+            console.log(error)
+        }
     }
 
-    const usernameSetter = (name) => {
-        setUsername(name)
+    const passwordSetter = (event) => {
+        event.preventDefault()
+        setPassword(event)
     }
+
+    const usernameSetter = (event) => {
+        event.preventDefault()
+        setUsername(event)
+    }
+
+    const newBlogSetter = (event) => {
+        const value = event.target.value
+        setNewBlog({
+            ...newBlog,
+            [event.target.name]: value
+        })
+    }
+
     return (
         <div>
             {user === null
@@ -81,6 +118,9 @@ const App = () => {
                     Blog={Blog}
                     user={user.name}
                     handleLogout={handleLogout}
+                    setBlog={newBlogSetter}
+                    newBlog={newBlog}
+                    createBlog={createBlog}
                 />
             }
 
