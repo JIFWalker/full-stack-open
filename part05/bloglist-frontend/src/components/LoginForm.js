@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
 import React from 'react'
 
-const LoginForm = ({ handleLogin, username, password, setPassword, setUsername }) => (
+
+const LoginForm = ({ handleLogin, username, password, setPassword, setUsername  }) => (
     <div>
-        <h2>Log in to application</h2>
         <form onSubmit={handleLogin}>
             <div>
       username

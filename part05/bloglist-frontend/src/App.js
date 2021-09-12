@@ -6,11 +6,13 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import BlogRender from './components/BlogRender'
 import LoginForm from './components/LoginForm'
+import ShowMessage from './components/ShowMessage'
 
 const App = () => {
     const [blogs, setBlogs] = useState([{  }])
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [message, setMessage] = useState([null, ''])
     const [user, setUser] = useState(null)
     const [newBlog, setNewBlog] = useState({
         title: '',
@@ -52,8 +54,11 @@ const App = () => {
             setUser(user)
             setUsername('')
             setPassword('')
-        } catch (error) {
-            console.log(error)
+            setMessage(['Login Succesful!', 'notification'])
+            messageTimeout()
+        } catch (exception) {
+            setMessage([exception.toString(), 'error'])
+            messageTimeout()
         }
     }
 
@@ -62,8 +67,9 @@ const App = () => {
             window.localStorage.clear()
             blogService.setToken(null)
             setUser(null)
-        } catch (error) {
-            console.log(error)
+        } catch (exception) {
+            setMessage([exception.toString(), 'error'])
+            messageTimeout()
         }
     }
 
@@ -79,18 +85,20 @@ const App = () => {
                 author: '',
                 url: '',
             })
-        } catch (error) {
-            console.log(error)
+            setMessage(
+                [`a new blog titled "${newBlog.title}" was created!`, 'notification'])
+            messageTimeout()
+        } catch (exception) {
+            setMessage([exception.toString(), 'error'])
+            messageTimeout()
         }
     }
 
     const passwordSetter = (event) => {
-        event.preventDefault()
         setPassword(event)
     }
 
     const usernameSetter = (event) => {
-        event.preventDefault()
         setUsername(event)
     }
 
@@ -102,26 +110,46 @@ const App = () => {
         })
     }
 
+    const messageTimeout = () => {
+        setTimeout(() => {
+            setMessage([null, ''])
+        }, 5000)
+    }
     return (
         <div>
             {user === null
-                ? <LoginForm
-                    username={username}
-                    password={password}
-                    handleLogin={handleLogin}
-                    setPassword={passwordSetter}
-                    setUsername={usernameSetter}
-                />
+                ?
+                <div>
+                    <h2>Log In To Application</h2>
+                    <ShowMessage
+                        message={message[0]}
+                        type={message[1]}
+                    />
+                    <LoginForm
+                        username={username}
+                        password={password}
+                        handleLogin={handleLogin}
+                        setPassword={passwordSetter}
+                        setUsername={usernameSetter}
+                    />
+                </div>
                 :
-                <BlogRender
-                    blogs={blogs}
-                    Blog={Blog}
-                    user={user.name}
-                    handleLogout={handleLogout}
-                    setBlog={newBlogSetter}
-                    newBlog={newBlog}
-                    createBlog={createBlog}
-                />
+                <div>
+                    <h2>Blogs</h2>
+                    <ShowMessage
+                        message={message[0]}
+                        type={message[1]}
+                    />
+                    <BlogRender
+                        blogs={blogs}
+                        Blog={Blog}
+                        user={user.name}
+                        handleLogout={handleLogout}
+                        setBlog={newBlogSetter}
+                        newBlog={newBlog}
+                        createBlog={createBlog}
+                    />
+                </div>
             }
 
         </div>
