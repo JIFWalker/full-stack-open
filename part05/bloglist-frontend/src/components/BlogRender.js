@@ -2,7 +2,13 @@
 import React from 'react'
 import AddBlog from './AddBlog'
 
-const BlogRender = ({ blogs, Blog, user, handleLogout, setBlog, newBlog, createBlog }) => {
+const BlogRender = ({
+    blogs,
+    Blog,
+    setBlog,
+    newBlog,
+    createBlog
+}) => {
     if (!blogs[0].id) {
         return (
             <div>
@@ -12,10 +18,6 @@ const BlogRender = ({ blogs, Blog, user, handleLogout, setBlog, newBlog, createB
     } else {
         return (
             <div>
-                <p>
-                    {user} logged in
-                    <button onClick = {handleLogout}>logout</button>
-                </p>
                 <div>
                     <AddBlog
                         setBlog={setBlog}

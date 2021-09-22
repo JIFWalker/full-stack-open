@@ -117,14 +117,15 @@ const App = () => {
     }
     return (
         <div>
+            <h2>Blogs List</h2>
+            <ShowMessage
+                message={message[0]}
+                type={message[1]}
+            />
             {user === null
                 ?
                 <div>
                     <h2>Log In To Application</h2>
-                    <ShowMessage
-                        message={message[0]}
-                        type={message[1]}
-                    />
                     <LoginForm
                         username={username}
                         password={password}
@@ -135,11 +136,11 @@ const App = () => {
                 </div>
                 :
                 <div>
+                    <p>
+                        {user.name} has logged in
+                        <button onClick={handleLogout}>logout</button>
+                    </p>
                     <h2>Blogs</h2>
-                    <ShowMessage
-                        message={message[0]}
-                        type={message[1]}
-                    />
                     <BlogRender
                         blogs={blogs}
                         Blog={Blog}
