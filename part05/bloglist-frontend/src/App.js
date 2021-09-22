@@ -1,12 +1,14 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-empty */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import BlogRender from './components/BlogRender'
 import LoginForm from './components/LoginForm'
 import ShowMessage from './components/ShowMessage'
+import BlogForm from './components/BlogForm'
+import Toggleable from './components/Toggleable'
 
 const App = () => {
     const [blogs, setBlogs] = useState([{  }])
@@ -14,11 +16,6 @@ const App = () => {
     const [password, setPassword] = useState('')
     const [message, setMessage] = useState([null, ''])
     const [user, setUser] = useState(null)
-    const [newBlog, setNewBlog] = useState({
-        title: '',
-        author: '',
-        url: '',
-    })
 
     useEffect(() => {
         updateData()
@@ -73,18 +70,15 @@ const App = () => {
         }
     }
 
-    const createBlog = async (event) => {
-        event.preventDefault()
+    const createBlog = (newBlog) => {
         try {
-            await blogService.create(newBlog)
-            let updatedBlog = blogs.concat(newBlog)
+            blogFormRef.current.toggleVisibility()
+            blogService
+                .create(newBlog)
+                .then(returnedBlogs => {
+                    setBlogs(blogs.concat(newBlog))
+                })
 
-            setBlogs(updatedBlog)
-            setNewBlog({
-                title: '',
-                author: '',
-                url: '',
-            })
             setMessage(
                 [`a new blog titled "${newBlog.title}" was created!`, 'notification'])
             messageTimeout()
@@ -102,19 +96,22 @@ const App = () => {
         setUsername(event)
     }
 
-    const newBlogSetter = (event) => {
-        const value = event.target.value
-        setNewBlog({
-            ...newBlog,
-            [event.target.name]: value
-        })
-    }
-
     const messageTimeout = () => {
         setTimeout(() => {
             setMessage([null, ''])
         }, 5000)
     }
+
+    const blogFormRef = useRef()
+
+    const blogForm = () => (
+        <Toggleable buttonLabel='Add Blog' ref={blogFormRef}>
+            <BlogForm
+                createBlog={createBlog}
+            />
+        </Toggleable>
+    )
+
     return (
         <div>
             <h2>Blogs List</h2>
@@ -141,14 +138,10 @@ const App = () => {
                         <button onClick={handleLogout}>logout</button>
                     </p>
                     <h2>Blogs</h2>
+                    {blogForm()}
                     <BlogRender
                         blogs={blogs}
                         Blog={Blog}
-                        user={user.name}
-                        handleLogout={handleLogout}
-                        setBlog={newBlogSetter}
-                        newBlog={newBlog}
-                        createBlog={createBlog}
                     />
                 </div>
             }
