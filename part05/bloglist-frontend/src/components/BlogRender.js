@@ -4,6 +4,7 @@ import React from 'react'
 const BlogRender = ({
     blogs,
     Blog,
+    updateLikes,
 }) => {
     if (!blogs[0].id) {
         return (
@@ -18,6 +19,7 @@ const BlogRender = ({
                     <Blog
                         key = {blog.id}
                         blog = {blog}
+                        updateLikes={updateLikes}
                     />)
                 }
             </div>

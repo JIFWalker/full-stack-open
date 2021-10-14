@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react'
+import LikeButton from './LikeButton'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, updateLikes, }) => {
     const blogStyle = {
         paddingTop: 10,
         paddingLeft: 2,
@@ -23,7 +24,7 @@ const Blog = ({ blog }) => {
                     <p>{blog.author}</p>
                     <p>{blog.url}</p>
                     <p>{blog.likes}
-                        <button>like</button>
+                        <button onClick={() => LikeButton(blog, updateLikes)}>like</button>
                     </p>
                     <button onClick={() => setVisibility(false)}>cancel</button>
                 </div>

@@ -88,6 +88,23 @@ const App = () => {
         }
     }
 
+    const updateLikes = (likedBlog) => {
+        try {
+            const blogIndex = blogs.findIndex(blog => blog.id ===likedBlog.id),
+                updatedblogs = [...blogs]
+            blogService
+                .update(likedBlog)
+                .then(blogs[blogIndex] = likedBlog)
+
+            setMessage(
+                [`${likedBlog.title} was liked!`, 'notification'])
+            messageTimeout()
+        } catch (exception) {
+            setMessage([exception.toString(), 'error'])
+            messageTimeout()
+        }
+    }
+
     const passwordSetter = (event) => {
         setPassword(event)
     }
@@ -111,6 +128,7 @@ const App = () => {
             />
         </Toggleable>
     )
+
 
     return (
         <div>
@@ -142,6 +160,7 @@ const App = () => {
                     <BlogRender
                         blogs={blogs}
                         Blog={Blog}
+                        updateLikes={updateLikes}
                     />
                 </div>
             }

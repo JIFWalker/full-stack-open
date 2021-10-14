@@ -29,10 +29,22 @@ router.delete('/:id', async (request, response) => {
     response.status(204).end()
 })
 
+router.get('/:id', async (request, response) => {
+    const blog = await Blog.findById(request.params.id)
+    response.json(blog.toJSON())
+})
+
 router.put('/:id', async (request, response) => {
     const blog = request.body
 
-    const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
+    const decodedToken = jwt.verify(request.token, process.env.SECRET)
+
+    if (!request.token || !decodedToken.id) {
+        return response.status(401).json({ error: 'token missing or invalid' })
+    }
+
+    const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog)
+
     response.json(updatedBlog.toJSON())
 })
 
