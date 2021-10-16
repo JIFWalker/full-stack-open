@@ -21,20 +21,18 @@ const App = () => {
         updateData()
     }, [])
 
-    useEffect(() => {
+    useEffect(async () => {
         const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
         if (loggedUserJSON) {
-            const user = JSON.parse(loggedUserJSON)
+            const user = await JSON.parse(loggedUserJSON)
             setUser(user)
             blogService.setToken(user.token)
         }
     }, [])
 
-    const updateData = () => {
-        blogService
-            .getAll().then(initialBlogs => {
-                setBlogs( initialBlogs )
-            })
+    const updateData = async () => {
+        const initialBlogs = await blogService.getAll()
+        setBlogs(initialBlogs)
     }
 
     const handleLogin = async (event) => {
@@ -59,7 +57,7 @@ const App = () => {
         }
     }
 
-    const handleLogout = async (event) => {
+    const handleLogout = (event) => {
         try {
             window.localStorage.clear()
             blogService.setToken(null)
@@ -70,14 +68,12 @@ const App = () => {
         }
     }
 
-    const createBlog = (newBlog) => {
+    const createBlog = async (newBlog) => {
         try {
             blogFormRef.current.toggleVisibility()
-            blogService
-                .create(newBlog)
-                .then(returnedBlogs => {
-                    setBlogs(blogs.concat(newBlog))
-                })
+
+            await blogService.create(newBlog)
+            setBlogs(blogs.concat(newBlog))
 
             setMessage(
                 [`a new blog titled "${newBlog.title}" was created!`, 'notification'])
@@ -90,11 +86,12 @@ const App = () => {
 
     const updateLikes = (likedBlog) => {
         try {
-            const blogIndex = blogs.findIndex(blog => blog.id ===likedBlog.id),
-                updatedblogs = [...blogs]
+            const blogIndex = blogs.findIndex(blog => blog.id === likedBlog.id),
+                updatedBlogs = [...blogs]
             blogService
                 .update(likedBlog)
-                .then(blogs[blogIndex] = likedBlog)
+                .then(updatedBlogs[blogIndex] = likedBlog)
+                .then(setBlogs(updatedBlogs))
 
             setMessage(
                 [`${likedBlog.title} was liked!`, 'notification'])
@@ -102,6 +99,25 @@ const App = () => {
         } catch (exception) {
             setMessage([exception.toString(), 'error'])
             messageTimeout()
+        }
+    }
+
+    const removeBlog = (removedBlog) => {
+        if (window.confirm(`Remove blog ${removedBlog.title} by ${removedBlog.author}?`) === true) {
+
+            const updatedBlogs = blogs.filter(blog => blog.id  !== removedBlog.id)
+
+            try {
+                blogService
+                    .remove(removedBlog.id)
+                    .then(setBlogs(updatedBlogs))
+
+                setMessage([`${removedBlog.title} was removed!`, 'notification'])
+                messageTimeout()
+            } catch (exception) {
+                setMessage([exception.toString(), 'error'])
+                messageTimeout()
+            }
         }
     }
 
@@ -161,6 +177,8 @@ const App = () => {
                         blogs={blogs}
                         Blog={Blog}
                         updateLikes={updateLikes}
+                        removeBlog={removeBlog}
+                        user={user}
                     />
                 </div>
             }

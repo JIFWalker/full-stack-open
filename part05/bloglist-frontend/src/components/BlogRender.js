@@ -5,6 +5,8 @@ const BlogRender = ({
     blogs,
     Blog,
     updateLikes,
+    removeBlog,
+    user,
 }) => {
     const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes)
 
@@ -17,11 +19,13 @@ const BlogRender = ({
     } else {
         return (
             <div>
-                {sortedBlogs.map(blog =>
+                { sortedBlogs.map(blog =>
                     <Blog
                         key = {blog.id}
                         blog = {blog}
                         updateLikes={updateLikes}
+                        removeBlog={removeBlog}
+                        user={user}
                     />)
                 }
             </div>

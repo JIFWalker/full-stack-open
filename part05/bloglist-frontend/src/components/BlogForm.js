@@ -16,8 +16,7 @@ const AddBlog = ({ createBlog }) => {
         })
     }
 
-    const addBlog = (event) => {
-        event.preventDefault()
+    const addBlog = () => {
         createBlog(newBlog)
 
         setNewBlog({
