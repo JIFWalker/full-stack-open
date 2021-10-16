@@ -3,7 +3,7 @@ module.exports = {
         'browser': true,
         'commonjs': true,
         'es2021': true,
-        'jest': true,
+        "jest/globals": true ,
     },
     'extends': [
         'eslint:recommended',
@@ -17,7 +17,7 @@ module.exports = {
         'sourceType': 'module'
     },
     'plugins': [
-        'react'
+        'react', 'jest'
     ],
     'rules': {
         'indent': [
@@ -46,5 +46,10 @@ module.exports = {
         ],
         'no-console': 0,
         "react/prop-types": 0
+    },
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
     }
 }
