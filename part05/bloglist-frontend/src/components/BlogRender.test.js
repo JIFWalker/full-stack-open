@@ -39,4 +39,18 @@ describe('Blog render tests', () => {
             component.container.querySelector('.toggleableContent')
         ).not.toHaveStyle('display: none')
     })
+
+    test('event handler called twice like button clicked twice', () => {
+        const mockHandler = jest.fn()
+
+        const component = render(
+            <Blog blog={blog} updateLikes={mockHandler} />
+        )
+
+        const button = component.getByText('like')
+        fireEvent.click(button)
+        fireEvent.click(button)
+
+        expect(mockHandler.mock.calls).toHaveLength(2)
+    })
 })
