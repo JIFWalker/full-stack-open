@@ -24,20 +24,20 @@ const Blog = ({ blog, updateLikes, removeBlog, user }) => {
 
         <div style={blogStyle}>
             <div key={blog.id}>
+                <div className='titleAndAuthor'>
+                    {blog.title} -{blog.author}
+                    <button type='button' style={hideWhenVisible} onClick={() => setVisibility(true)}>view</button>
+                    <button type='button' style={showWhenVisible} onClick={() => setVisibility(false)}>hide</button>
+                </div>
 
-                {blog.title}
+                <div style={showWhenVisible} className='toggleableContent'>
+                    <p className='url'>{blog.url}</p>
 
-                <button type='button' style={hideWhenVisible} onClick={() => setVisibility(true)}>view</button>
-                <button type='button' style={showWhenVisible} onClick={() => setVisibility(false)}>hide</button>
-
-                <div style={showWhenVisible}>
-                    <p>{blog.url}</p>
-
-                    <p>{blog.likes}
+                    <p className='likes'>{blog.likes}
                         <button type='button' onClick={() => LikeButton(blog, updateLikes)}>like</button>
                     </p>
 
-                    <p>{blog.author}</p>
+
 
                     <button type='button' style={{ display: isAuthor() }} onClick={() => removeBlog(blog)}>remove</button>
                 </div>
