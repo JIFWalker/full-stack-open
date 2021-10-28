@@ -9,8 +9,14 @@ const BlogRender = ({
     user,
 }) => {
     const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes)
-
-    if (!blogs[0].id) {
+    console.log(blogs)
+    if (blogs.length === 0) {
+        return (
+            <h2>
+                No blogs in list!
+            </h2>
+        )
+    } else if (!blogs[0].id) {
         return (
             <div>
             Loading...
