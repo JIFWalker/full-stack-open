@@ -37,4 +37,20 @@ describe('Blog app', function() {
             cy.get('html').should('not.contain', 'Holo has logged in')
         })
     })
+
+    describe('When logged in', function() {
+        beforeEach(function() {
+            cy.login({ username: 'WiseWolf', password: 'Apples' })
+        })
+
+        it('A blog can be created', function() {
+            cy.contains('Add Blog').click()
+            cy.get('#title').type('I Love Apples')
+            cy.get('#author').type('Holo')
+            cy.get('#url').type('yummy.apples')
+            cy.get('#create').click()
+
+            cy.get('html').should('contain', 'I Love Apples -Holo')
+        })
+    })
 })

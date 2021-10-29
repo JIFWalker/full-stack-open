@@ -9,9 +9,6 @@ node_modules/
 # testing
 /coverage
 /cypress/videos/
-/cypress/fixtures/
-/cypress/plugins/
-/cypress/support/
 
 # production
 /build

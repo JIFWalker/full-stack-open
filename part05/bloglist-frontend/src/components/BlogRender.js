@@ -9,7 +9,6 @@ const BlogRender = ({
     user,
 }) => {
     const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes)
-    console.log(blogs)
     if (blogs.length === 0) {
         return (
             <h2>

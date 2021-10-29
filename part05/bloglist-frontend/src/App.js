@@ -22,7 +22,7 @@ const App = () => {
     }, [])
 
     useEffect(async () => {
-        const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+        const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
         if (loggedUserJSON) {
             const user = await JSON.parse(loggedUserJSON)
             setUser(user)
@@ -43,7 +43,7 @@ const App = () => {
             })
 
             window.localStorage.setItem(
-                'loggedNoteappUser', JSON.stringify(user)
+                'loggedBlogappUser', JSON.stringify(user)
             )
             blogService.setToken(user.token)
             setUser(user)
@@ -68,12 +68,12 @@ const App = () => {
         }
     }
 
-    const createBlog = async (newBlog) => {
+    const createBlog = (newBlog) => {
         try {
-            blogFormRef.current.toggleVisibility()
+            blogService.create(newBlog)
+                .then(setBlogs(blogs.concat(newBlog)))
+                .then(blogFormRef.current.toggleVisibility())
 
-            await blogService.create(newBlog)
-            setBlogs(blogs.concat(newBlog))
 
             setMessage(
                 [`a new blog titled "${newBlog.title}" was created!`, 'notification'])
