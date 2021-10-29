@@ -52,5 +52,30 @@ describe('Blog app', function() {
 
             cy.get('html').should('contain', 'I Love Apples -Holo')
         })
+
+        describe('When a blog exists', function() {
+            beforeEach(function() {
+                cy.login({ username: 'WiseWolf', password: 'Apples' })
+                cy.createBlog({
+                    title: 'I Love Apples',
+                    author: 'Holo',
+                    url: 'yummy.apples'
+                })
+            })
+
+            it('A blog can be liked', function() {
+                cy.contains('I Love Apples')
+                    .as('ILA')
+                    .contains('view')
+                    .click()
+                cy.get('@ILA')
+                    .parent()
+                    .contains('like')
+                    .click()
+
+                cy.get('.notification').should('contain', 'I Love Apples was liked!')
+            })
+        })
+
     })
 })
