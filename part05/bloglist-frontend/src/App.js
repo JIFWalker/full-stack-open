@@ -17,10 +17,6 @@ const App = () => {
     const [message, setMessage] = useState([null, ''])
     const [user, setUser] = useState(null)
 
-    useEffect(() => {
-        updateData()
-    }, [])
-
     useEffect(async () => {
         const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
         if (loggedUserJSON) {
@@ -28,6 +24,7 @@ const App = () => {
             setUser(user)
             blogService.setToken(user.token)
         }
+        await updateData()
     }, [])
 
     const updateData = async () => {
@@ -84,14 +81,16 @@ const App = () => {
         }
     }
 
-    const updateLikes = (likedBlog) => {
+    const updateLikes = async (likedBlog) => {
         try {
-            const blogIndex = blogs.findIndex(blog => blog.id === likedBlog.id),
+            let blogIndex = blogs.findIndex(blog => blog.id === likedBlog.id),
                 updatedBlogs = [...blogs]
+
             blogService
                 .update(likedBlog)
                 .then(updatedBlogs[blogIndex] = likedBlog)
                 .then(setBlogs(updatedBlogs))
+                .then(updateData())
 
             setMessage(
                 [`${likedBlog.title} was liked!`, 'notification'])
@@ -172,13 +171,14 @@ const App = () => {
                         <button onClick={handleLogout}>logout</button>
                     </p>
                     <h2>Blogs</h2>
-                    {blogForm()}
+                    <div>{blogForm()}</div>
                     <BlogRender
                         blogs={blogs}
                         Blog={Blog}
                         updateLikes={updateLikes}
                         removeBlog={removeBlog}
                         user={user}
+                        updateData={updateData}
                     />
                 </div>
             }

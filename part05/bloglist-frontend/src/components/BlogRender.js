@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React from 'react'
 
@@ -30,7 +31,7 @@ const BlogRender = ({
                         blog = {blog}
                         updateLikes={updateLikes}
                         removeBlog={removeBlog}
-                        user={user}
+                        loggedUser={user}
                     />)
                 }
             </div>

@@ -8,7 +8,14 @@ describe('Blog app', function() {
             username: 'WiseWolf',
             password: 'Apples'
         }
+        const user2 = {
+            name: 'Senko',
+            username: 'HelpfulFox',
+            password: 'mofumofu'
+        }
+
         cy.request('POST', 'http://localhost:3003/api/users/', user)
+        cy.request('POST', 'http://localhost:3003/api/users/', user2)
         cy.visit('http://localhost:3000')
     })
 
@@ -61,19 +68,38 @@ describe('Blog app', function() {
                     author: 'Holo',
                     url: 'yummy.apples'
                 })
-            })
-
-            it('A blog can be liked', function() {
                 cy.contains('I Love Apples')
+                    .parent()
                     .as('ILA')
                     .contains('view')
                     .click()
+            })
+
+            it('A blog can be liked', function() {
                 cy.get('@ILA')
-                    .parent()
                     .contains('like')
                     .click()
 
                 cy.get('.notification').should('contain', 'I Love Apples was liked!')
+            })
+
+            it('A blog can be deleted by logged in user', function() {
+                cy.get('@ILA')
+                    .contains('remove')
+                    .click()
+            })
+
+            it('Other user can not delete blog', function() {
+                cy.contains('logout')
+                    .click()
+
+                cy.login({ username: 'HelpfulFox', password: 'mofumofu' })
+
+                cy.get('@ILA')
+                    .contains('view')
+                    .click()
+
+                cy.should('not.contain', 'remove')
             })
         })
 
