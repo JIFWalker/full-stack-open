@@ -33,16 +33,57 @@ Cypress.Commands.add('login', ({ username, password }) => {
     })
 })
 
-Cypress.Commands.add('createBlog', ({ title, author, url }) => {
+Cypress.Commands.add('createBlog', ({ title, author, url, likes }) => {
     cy.contains('Add Blog').click()
     cy.request({
         url: 'http://localhost:3003/api/blogs/',
         method: 'POST',
-        body: { title, author, url },
+        body: { title, author, url, likes },
         headers: {
             'Authorization': `bearer ${JSON.parse(localStorage.getItem('loggedBlogappUser')).token}`
         }
     })
 
     cy.visit('http://localhost:3000')
+})
+
+Cypress.Commands.add('openView', (title) => {
+    cy.contains(title)
+        .parent()
+        .parent()
+        .contains('view')
+        .click()
+})
+
+Cypress.Commands.add('like', (title) => {
+    cy.get('#blogs')
+        .contains(title)
+        .parent()
+        .contains('like')
+        .click()
+})
+
+Cypress.Commands.add('checkLikeOrder', () => {
+    cy.get('.blog').find('.likes')
+        .should(($likes) => {
+            let likesArray = $likes.map((i, el) =>
+                parseInt(Cypress.$(el).text()))
+            likesArray = likesArray.get()
+            switch (true) {
+            case likesArray[0] === likesArray[1] :
+                expect(likesArray[1]).to.be.greaterThan(likesArray[2])
+                expect(likesArray[2]).to.be.lessThan(likesArray[0])
+                break
+            case likesArray[1] === likesArray[2] :
+                expect(likesArray[0]).to.be.greaterThan(likesArray[1])
+                expect(likesArray[2]).to.be.lessThan(likesArray[0])
+                break
+            default :
+                expect(likesArray[0]).to.be.greaterThan(likesArray[1])
+                expect(likesArray[1]).to.be.greaterThan(likesArray[2])
+                expect(likesArray[2]).to.be.lessThan(likesArray[0])
+            }
+
+
+        })
 })

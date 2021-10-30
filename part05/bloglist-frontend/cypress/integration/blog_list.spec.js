@@ -102,6 +102,39 @@ describe('Blog app', function() {
                 cy.should('not.contain', 'remove')
             })
         })
+        it('Blogs in descending order of likes', function() {
+            cy.createBlog({
+                title: 'I Love Apples',
+                author: 'Holo',
+                url: 'yummy.apples',
+                likes: 5
+            })
+            cy.createBlog({
+                title: '10 Reasons Why Kraft Lawrence Is A Fool',
+                author: 'Holo',
+                url: 'yummy.apples',
+                likes: 6
+            })
+            cy.createBlog({
+                title: 'Wolves Are Bad',
+                author: 'The Church',
+                url: 'God.OhLawdy',
+                likes: 1
+            })
+
+            cy.openView('I Love Apples')
+            cy.openView('10 Reasons Why Kraft Lawrence Is A Fool')
+            cy.openView('Wolves Are Bad')
+
+            cy.checkLikeOrder()
+
+            cy.like('I Love Apples')
+            cy.checkLikeOrder()
+
+
+            cy.like('I Love Apples')
+            cy.checkLikeOrder()
+        })
 
     })
 })

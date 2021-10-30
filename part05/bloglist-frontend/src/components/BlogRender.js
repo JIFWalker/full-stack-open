@@ -24,7 +24,7 @@ const BlogRender = ({
         )
     } else {
         return (
-            <div>
+            <div id='blogs'>
                 { sortedBlogs.map(blog =>
                     <Blog
                         key = {blog.id}

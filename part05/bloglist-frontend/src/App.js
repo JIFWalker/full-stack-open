@@ -81,7 +81,7 @@ const App = () => {
         }
     }
 
-    const updateLikes = async (likedBlog) => {
+    const updateLikes = (likedBlog) => {
         try {
             let blogIndex = blogs.findIndex(blog => blog.id === likedBlog.id),
                 updatedBlogs = [...blogs]
@@ -90,11 +90,11 @@ const App = () => {
                 .update(likedBlog)
                 .then(updatedBlogs[blogIndex] = likedBlog)
                 .then(setBlogs(updatedBlogs))
-                .then(updateData())
 
             setMessage(
                 [`${likedBlog.title} was liked!`, 'notification'])
             messageTimeout()
+            updateData()
         } catch (exception) {
             setMessage([exception.toString(), 'error'])
             messageTimeout()

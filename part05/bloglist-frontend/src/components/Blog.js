@@ -1,3 +1,4 @@
+/* eslint-disable no-trailing-spaces */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react'
@@ -20,23 +21,25 @@ const Blog = ({ blog, updateLikes, removeBlog, loggedUser }) => {
 
     const isAuthor = () => (blogOwnerID.includes(userID)) ? '' : 'none'
 
+
+
     return(
 
         <div style={blogStyle}>
-            <div key={blog.id}>
-                <div className='titleAndAuthor'>
+            <div key={blog.id} className='blog' >
+                <div className='titleAndAuthor' style={{ display: 'inline', paddingRight: 5 }}>
                     {blog.title} -{blog.author}
-                    <button type='button' style={hideWhenVisible} onClick={() => setVisibility(true)}>view</button>
-                    <button type='button' style={showWhenVisible} onClick={() => setVisibility(false)}>hide</button>
                 </div>
+                <button type='button' style={hideWhenVisible} onClick={() => setVisibility(true)}>view</button>
+                <button type='button' style={showWhenVisible} onClick={() => setVisibility(false)}>hide</button>
 
                 <div style={showWhenVisible} className='toggleableContent'>
-                    <p className='url'>{blog.url}</p>
+                    <p className='url' >{blog.url}</p>
 
-                    <p className='likes'>{blog.likes}
-                        <button type='button' onClick={() => LikeButton(blog, updateLikes)}>like</button>
-                    </p>
-
+                    <div>
+                        <p className='likes' style={{ display: 'inline', paddingRight: 5 }} >{blog.likes}</p>
+                        <button type='button' className='likeButton'  onClick={() => LikeButton(blog, updateLikes)}>like</button>
+                    </div>
 
 
                     <button type='button' style={{ display: isAuthor() }} onClick={() => removeBlog(blog)}>remove</button>
