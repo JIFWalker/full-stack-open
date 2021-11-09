@@ -9,7 +9,7 @@ const reducer = (state = [], action) => {
     return state.concat(action.payload)
 
     case 'anecdote/vote':
-      const id = action.payload
+      const id = action.payload.id
       const anecdoteToChange = state.find(anecdote => anecdote.id === id)
 
       const updatedAnecdote = {
@@ -23,17 +23,24 @@ const reducer = (state = [], action) => {
   }
 }
 
-export const vote = (id) => {
-  return {
-    type: 'anecdote/vote',
-    payload:  id 
+export const vote = (anecdote) => {
+  return async dispatch => {
+    const voted = { ...anecdote, votes: anecdote.votes + 1}
+    await anecdoteService.vote(voted)
+    dispatch ({
+      type: 'anecdote/vote',
+      payload: anecdote 
+    })
   }
 }
 
 export const createAnecdote = (content) => {
-  return {
-    type: 'anecdote/new',
-    payload: content
+  return async dispatch => {
+    const newAnecdote = await anecdoteService.createNew(content)
+    dispatch({
+      type: 'anecdote/new',
+      payload: newAnecdote
+    })
   }
 }
 

@@ -1,51 +1,33 @@
 
-const initialState = [
-    '',
-    'none'
-]
-
-const reducer = (state = initialState, action) => {
+const reducer = (state = 'none', action) => {
     switch(action.type) {
-        case 'notification/new':
-            const newAnecdote = [
-                `'${action.payload}' added!`, ''
-            ]
-            return newAnecdote
-        case 'notification/vote':
-            const voteAnecdote = [
-                `you voted '${action.payload}'`,
-                ''
-           ]
-            return voteAnecdote
-        case 'notification/timeout':
-            const cleared = [
-                '',
-                'none'
-            ]
-            return cleared
+        case 'notification/set':
+            return action.payload
+        case 'notification/clear':
+            return 'none'
         default:
             return state
     }
 }
 
-export const voteNotification = content => {
-    return {
-    type: 'notification/vote',
-    payload: content
-    }
-}
+export const setNotification = (message, time) => {
+    const seconds = time*1000
 
-export const newNotification = content => {
-    return {
-        type: 'notification/new',
-        payload: content
+    return async dispatch => {
+        dispatch({
+            type: 'notification/set',
+            payload: message
+        })
+        setTimeout(() => {
+            dispatch(notificationTimeout())
+        }, seconds)
     }
 }
 
 export const notificationTimeout = () => {
     return {
-        type: 'notification/timeout',
-        payload: null
+        type: 'notification/clear',
+        payload: ''
     }
 }
 
