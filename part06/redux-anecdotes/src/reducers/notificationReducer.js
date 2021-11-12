@@ -11,6 +11,7 @@ const reducer = (state = 'none', action) => {
 }
 
 export const setNotification = (message, time) => {
+    window.clearTimeout(window.timeout)
     const seconds = time*1000
 
     return async dispatch => {
@@ -18,13 +19,14 @@ export const setNotification = (message, time) => {
             type: 'notification/set',
             payload: message
         })
-        setTimeout(() => {
-            dispatch(notificationTimeout())
+        
+        window.timeout = setTimeout(() => {dispatch(notificationTimeout())
         }, seconds)
     }
 }
 
 export const notificationTimeout = () => {
+
     return {
         type: 'notification/clear',
         payload: ''
