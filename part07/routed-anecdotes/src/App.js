@@ -95,6 +95,7 @@ const CreateNew = (props) => {
           <input {...info} />
         </div>
         <button>create</button>
+        <button onClick={() => content.reset}>reset</button>
       </form>
     </div>
   )
