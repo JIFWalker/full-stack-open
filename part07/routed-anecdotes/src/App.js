@@ -63,10 +63,16 @@ const Footer = () => (
 
 const CreateNew = (props) => {
   const history = useHistory()
-  const content = useField('text')
-  const author = useField('text')
-  const info = useField('text')
-
+  const {clear: cClear, ...content} = useField('text')
+  const {clear: aClear, ...author} = useField('text')
+  const {clear: iClear, ...info} = useField('text')
+  
+  const clear = (e) => {
+    e.preventDefault()
+    cClear()
+    aClear()
+    iClear()
+  }
   const handleSubmit = (e) => {
     e.preventDefault()
     props.addNew({
@@ -94,8 +100,8 @@ const CreateNew = (props) => {
           url for more info
           <input {...info} />
         </div>
-        <button>create</button>
-        <button onClick={() => content.reset}>reset</button>
+        <button type='submit' >create</button>
+        <button onClick={clear}>clear</button>
       </form>
     </div>
   )
