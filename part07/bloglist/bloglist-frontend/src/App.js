@@ -11,16 +11,21 @@ import BlogForm from './components/BlogForm'
 import Toggleable from './components/Toggleable'
 import { useSelector, useDispatch } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
+import { initializeBlogs } from './reducers/blogReducer'
 
 
 const App = () => {
-    const [blogs, setBlogs] = useState([{  }])
+    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(initializeBlogs())
+
+    }, [dispatch])
+
+    const blogs = useSelector(state => state.blogs)
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-    const [message, setMessage] = useState([null, ''])
     const [user, setUser] = useState(null)
 
-    const dispatch = useDispatch()
 
 
     useEffect(async () => {
@@ -30,13 +35,7 @@ const App = () => {
             setUser(user)
             blogService.setToken(user.token)
         }
-        await updateData()
     }, [])
-
-    const updateData = async () => {
-        const initialBlogs = await blogService.getAll()
-        setBlogs(initialBlogs)
-    }
 
     const handleLogin = async (event) => {
         event.preventDefault()
@@ -77,25 +76,6 @@ const App = () => {
         }
     }
 
-    const createBlog = (newBlog) => {
-        try {
-            blogService.create(newBlog)
-                .then(setBlogs(blogs.concat(newBlog)))
-                .then(blogFormRef.current.toggleVisibility())
-
-
-            dispatch(
-                setNotification(
-                    [`a new blog titled "${newBlog.title}" was created!`, 'notification'], 10)
-            )
-        } catch (exception) {
-            dispatch(
-                setNotification(
-                    [exception.toString(), 'error'], 10)
-            )
-        }
-    }
-
     const updateLikes = (likedBlog) => {
         try {
             let blogIndex = blogs.findIndex(blog => blog.id === likedBlog.id),
@@ -104,14 +84,12 @@ const App = () => {
             blogService
                 .update(likedBlog)
                 .then(updatedBlogs[blogIndex] = likedBlog)
-                .then(setBlogs(updatedBlogs))
 
             dispatch(
                 setNotification(
                     [`${likedBlog.title} was liked!`, 'notification'], 10)
             )
 
-            updateData()
         } catch (exception) {
             dispatch(
                 setNotification(
@@ -123,12 +101,10 @@ const App = () => {
     const removeBlog = (removedBlog) => {
         if (window.confirm(`Remove blog ${removedBlog.title} by ${removedBlog.author}?`) === true) {
 
-            const updatedBlogs = blogs.filter(blog => blog.id  !== removedBlog.id)
 
             try {
                 blogService
                     .remove(removedBlog.id)
-                    .then(setBlogs(updatedBlogs))
 
                 dispatch(
                     setNotification([`${removedBlog.title} was removed!`, 'notification'], 10)
@@ -136,7 +112,7 @@ const App = () => {
             } catch (exception) {
                 dispatch(
                     setNotification(
-                        [exception.toString(), 'error'], 10)
+                        [exception.toString(), 'error'], 5)
                 )
             }
         }
@@ -154,20 +130,14 @@ const App = () => {
 
     const blogForm = () => (
         <Toggleable buttonLabel='Add Blog' ref={blogFormRef}>
-            <BlogForm
-                createBlog={createBlog}
-            />
+            <BlogForm/>
         </Toggleable>
     )
-
 
     return (
         <div>
             <h2>Blogs List</h2>
-            <ShowMessage
-                message={message[0]}
-                type={message[1]}
-            />
+            <ShowMessage />
             {user === null
                 ?
                 <div>
@@ -191,10 +161,8 @@ const App = () => {
                     <BlogRender
                         blogs={blogs}
                         Blog={Blog}
-                        updateLikes={updateLikes}
                         removeBlog={removeBlog}
                         user={user}
-                        updateData={updateData}
                     />
                 </div>
             }

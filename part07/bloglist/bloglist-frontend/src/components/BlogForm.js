@@ -1,7 +1,10 @@
-/* eslint-disable react/prop-types */
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { createBlog } from '../reducers/blogReducer'
+import { setNotification } from '../reducers/notificationReducer'
 
-const AddBlog = ({ createBlog }) => {
+const AddBlog = () => {
+    const dispatch = useDispatch()
     const [newBlog, setNewBlog] = useState({
         title: '',
         author: '',
@@ -9,6 +12,7 @@ const AddBlog = ({ createBlog }) => {
     })
 
     const handleChange = (event) => {
+        event.preventDefault()
         const value = event.target.value
         setNewBlog({
             ...newBlog,
@@ -17,7 +21,20 @@ const AddBlog = ({ createBlog }) => {
     }
 
     const addBlog = () => {
-        createBlog(newBlog)
+        try{
+            dispatch(
+                createBlog(newBlog)
+            )
+
+            dispatch(
+                setNotification([`A new blog titled "${newBlog.title}" was created!`, 'notification'], 10)
+            )
+        } catch (exception) {
+            dispatch(
+                setNotification(
+                    [exception.toString(), 'error'], 10)
+            )
+        }
 
         setNewBlog({
             title: '',

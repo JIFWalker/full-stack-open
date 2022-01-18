@@ -1,11 +1,12 @@
-/* eslint-disable no-trailing-spaces */
 /* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
-import React, { useState, useEffect } from 'react'
-import LikeButton from './LikeButton'
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { deleteBlog } from '../reducers/blogReducer'
+import { setNotification } from '../reducers/notificationReducer'
+import { updateLikes } from '../reducers/blogReducer'
 
-
-const Blog = ({ blog, updateLikes, removeBlog, loggedUser }) => {
+const Blog = ({ blog, loggedUser }) => {
+    const dispatch = useDispatch()
     const blogStyle = {
         paddingTop: 10,
         paddingLeft: 2,
@@ -22,7 +23,45 @@ const Blog = ({ blog, updateLikes, removeBlog, loggedUser }) => {
 
     const isAuthor = () => (blogOwnerID.includes(userID)) ? '' : 'none'
 
+    const removeBlog = (blog) => {
+        if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`) === true) {
 
+
+            try {
+                dispatch(
+                    deleteBlog(blog)
+                )
+
+                dispatch(
+                    setNotification([`${blog.title} was removed!`, 'notification'], 10)
+                )
+            } catch (exception) {
+                dispatch(
+                    setNotification(
+                        [exception.toString(), 'error'], 10)
+                )
+            }
+        }
+    }
+
+    const likeButton = (blog) => {
+        try {
+            dispatch(
+                updateLikes(blog)
+            )
+
+            dispatch(
+                setNotification(
+                    [`${blog.title} was liked!`, 'notification'], 10)
+            )
+
+        } catch (exception) {
+            dispatch(
+                setNotification(
+                    [exception.toString(), 'error'], 10)
+            )
+        }
+    }
 
     return(
 
@@ -31,6 +70,7 @@ const Blog = ({ blog, updateLikes, removeBlog, loggedUser }) => {
                 <div className='titleAndAuthor' style={{ display: 'inline', paddingRight: 5 }}>
                     {blog.title} -{blog.author}
                 </div>
+
                 <button type='button' style={hideWhenVisible} onClick={() => setVisibility(true)}>view</button>
                 <button type='button' style={showWhenVisible} onClick={() => setVisibility(false)}>hide</button>
 
@@ -39,7 +79,7 @@ const Blog = ({ blog, updateLikes, removeBlog, loggedUser }) => {
 
                     <div>
                         <p className='likes' style={{ display: 'inline', paddingRight: 5 }} >{blog.likes}</p>
-                        <button type='button' className='likeButton'  onClick={() => LikeButton(blog, updateLikes)}>like</button>
+                        <button type='button' className='likeButton'  onClick={() => likeButton(blog)}>like</button>
                     </div>
 
 

@@ -1,12 +1,8 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
 import React from 'react'
 
 const BlogRender = ({
     blogs,
     Blog,
-    updateLikes,
-    removeBlog,
     user,
 }) => {
     const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes)
@@ -29,8 +25,6 @@ const BlogRender = ({
                     <Blog
                         key = {blog.id}
                         blog = {blog}
-                        updateLikes={updateLikes}
-                        removeBlog={removeBlog}
                         loggedUser={user}
                     />)
                 }
