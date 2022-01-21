@@ -1,47 +1,56 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { setNotification } from '../reducers/notificationReducer'
+import { login } from '../reducers/userReducer'
 
-const LoginForm = ({
-    handleLogin,
-    username,
-    password,
-    setPassword,
-    setUsername
-}) => (
-    <div>
-        <form onSubmit={handleLogin}>
-            <div>
+const LoginForm = () => {
+    const dispatch = useDispatch()
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+
+    const handleLogin = async (event) => {
+        event.preventDefault()
+        try {
+            dispatch (login(username, password))
+            dispatch(
+                setNotification(
+                    ['Login Succesful!', 'notification'], 10)
+            )
+        } catch (exception) {
+            dispatch(
+                setNotification(
+                    [exception.toString(), 'error'], 10)
+            )
+        }
+    }
+    return (
+        <div>
+            <form onSubmit={handleLogin}>
+                <div>
       username
-                <input
-                    id="username"
-                    type="text"
-                    value={username}
-                    name="username"
-                    onChange={({ target }) => setUsername(target.value)}
-                />
-            </div>
-            <div>
+                    <input
+                        id="username"
+                        type="text"
+                        value={username}
+                        name="username"
+                        onChange={({ target }) => setUsername(target.value)}
+                    />
+                </div>
+                <div>
       password
-                <input
-                    id="password"
-                    type="password"
-                    value={password}
-                    name="password"
-                    onChange={({ target }) => setPassword(target.value)}
-                />
-            </div>
-            <button id="login-button" type="submit">login</button>
-        </form>
-    </div>
-)
-
-LoginForm.propTypes = {
-    handleLogin: PropTypes.func.isRequired,
-    setUsername: PropTypes.func.isRequired,
-    setPassword: PropTypes.func.isRequired,
-    username: PropTypes.string.isRequired,
-    password: PropTypes.string.isRequired
-}
+                    <input
+                        id="password"
+                        type="password"
+                        value={password}
+                        name="password"
+                        onChange={({ target }) => setPassword(target.value)}
+                    />
+                </div>
+                <button id="login-button" type="submit">login</button>
+            </form>
+        </div>
+    )}
 
 export default LoginForm
 
