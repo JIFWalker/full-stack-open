@@ -1,6 +1,15 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-empty */
 import React, { useState, useEffect, useRef } from 'react'
+import {
+    BrowserRouter as Router,
+    Switch, Route, Link, withRouter
+} from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { setNotification } from './reducers/notificationReducer'
+import { initializeBlogs } from './reducers/blogReducer'
+import { initializeUser, logout } from './reducers/userReducer'
+import { initializeUsers } from './reducers/userListReducer'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import BlogRender from './components/BlogRender'
@@ -8,17 +17,21 @@ import LoginForm from './components/LoginForm'
 import ShowMessage from './components/ShowMessage'
 import BlogForm from './components/BlogForm'
 import Toggleable from './components/Toggleable'
-import { useSelector, useDispatch } from 'react-redux'
-import { setNotification } from './reducers/notificationReducer'
-import { initializeBlogs } from './reducers/blogReducer'
-import { initializeUser, logout } from './reducers/userReducer'
+import UserData from './components/UserData'
+
+
 
 
 const App = () => {
+
+    const padding = {
+        padding: 5
+    }
+
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(initializeBlogs())
-
+        dispatch(initializeUsers())
     }, [dispatch])
 
     const blogs = useSelector(state => state.blogs)
@@ -54,32 +67,47 @@ const App = () => {
     )
 
     return (
-        <div>
-            <h2>Blogs List</h2>
-            <ShowMessage />
-            {user === null
-                ?
-                <div>
-                    <h2>Log In To Application</h2>
-                    <LoginForm />
-                </div>
-                :
-                <div>
-                    <p>
-                        {user.name} has logged in
-                        <button onClick={handleLogout}>logout</button>
-                    </p>
-                    <h2>Blogs</h2>
-                    <div>{blogForm()}</div>
-                    <BlogRender
-                        blogs={blogs}
-                        Blog={Blog}
-                        user={user}
-                    />
-                </div>
-            }
+        <Router>
 
-        </div>
+            <div>
+                <Link style={padding} to="/">home</Link>
+                <Link style={padding} to='/users'>Users</Link>
+            </div>
+
+            <div>
+                <h2>Blogs List</h2>
+                <ShowMessage />
+                {user === null
+                    ?
+                    <div>
+                        <h2>Log In To Application</h2>
+                        <LoginForm />
+                    </div>
+                    :
+                    <div>
+                        <p>
+                            {user.name} has logged in
+                            <button onClick={handleLogout}>logout</button>
+                        </p>
+                        <Switch>
+                            <Route path="/users">
+                                <UserData />
+                            </Route>
+                            <Route path="/">
+                                <h2>Blogs</h2>
+                                <div>{blogForm()}</div>
+                                <BlogRender
+                                    blogs={blogs}
+                                    Blog={Blog}
+                                    user={user}
+                                />
+                            </Route>
+                        </Switch>
+                    </div>
+                }
+
+            </div>
+        </Router>
     )
 }
 
