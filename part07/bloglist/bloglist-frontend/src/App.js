@@ -1,8 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-empty */
 import React, { useState, useEffect, useRef } from 'react'
-import {
-    BrowserRouter as Router,
+import { BrowserRouter as Router,
     Switch, Route, Link, withRouter
 } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
@@ -17,7 +16,8 @@ import LoginForm from './components/LoginForm'
 import ShowMessage from './components/ShowMessage'
 import BlogForm from './components/BlogForm'
 import Toggleable from './components/Toggleable'
-import UserData from './components/UserData'
+import UsersData from './components/UsersData'
+import UserBlogs from './components/UserBlogs'
 
 
 
@@ -36,6 +36,7 @@ const App = () => {
 
     const blogs = useSelector(state => state.blogs)
     const user = useSelector(state => state.user)
+    const users = useSelector(state => state.userList)
 
 
     useEffect(async () => {
@@ -68,9 +69,8 @@ const App = () => {
 
     return (
         <Router>
-
             <div>
-                <Link style={padding} to="/">home</Link>
+                <Link style={padding} to="/">Home</Link>
                 <Link style={padding} to='/users'>Users</Link>
             </div>
 
@@ -90,8 +90,11 @@ const App = () => {
                             <button onClick={handleLogout}>logout</button>
                         </p>
                         <Switch>
-                            <Route path="/users">
-                                <UserData />
+                            <Route path="/users/:id" >
+                                <UserBlogs />
+                            </Route>
+                            <Route path="/users" >
+                                <UsersData />
                             </Route>
                             <Route path="/">
                                 <h2>Blogs</h2>
