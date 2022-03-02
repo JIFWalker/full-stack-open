@@ -24,7 +24,7 @@ const UserData = () => {
             <table>
                 <tbody>
                     <tr>
-                        <td> </td>
+                        <td></td>
                         <td><b>Blogs Created</b></td>
                     </tr>
                     {userList}

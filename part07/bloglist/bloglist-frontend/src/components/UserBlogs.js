@@ -1,12 +1,7 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
 
-const UserBlogs = () => {
-    const id = useParams().id
-    const user = useSelector(state => state.userList.find(
-        user => String(user.id) === String(id)
-    ))
+const UserBlogs = ({ user }) => {
+
 
     if (!user) {
         return null

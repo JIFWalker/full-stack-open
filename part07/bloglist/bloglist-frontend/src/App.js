@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-empty */
 import React, { useState, useEffect, useRef } from 'react'
-import { BrowserRouter as Router,
+import { BrowserRouter as Router, useRouteMatch,
     Switch, Route, Link, withRouter
 } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
@@ -67,15 +67,30 @@ const App = () => {
         </Toggleable>
     )
 
+    const userMatch = useRouteMatch('/users/:id')
+    const blogMatch = useRouteMatch('/blogs/:id')
+    const userData = userMatch
+        ? users.find(user => String(user.id) === String(userMatch.params.id))
+        : null
+    const blog = blogMatch
+        ? blogs.find(blog => String(blog.id) === String(blogMatch.params.id))
+        : null
+
     return (
-        <Router>
+        <div>
             <div>
                 <Link style={padding} to="/">Home</Link>
                 <Link style={padding} to='/users'>Users</Link>
+                {user
+                    ? <div style={padding}>
+                        <em>{user.name} logged in</em>
+                        <button onClick={handleLogout}>logout</button>
+                    </div>
+                    : <Link style={padding} to="/login">Login</Link>
+                }
             </div>
 
             <div>
-                <h2>Blogs List</h2>
                 <ShowMessage />
                 {user === null
                     ?
@@ -84,33 +99,30 @@ const App = () => {
                         <LoginForm />
                     </div>
                     :
-                    <div>
-                        <p>
-                            {user.name} has logged in
-                            <button onClick={handleLogout}>logout</button>
-                        </p>
-                        <Switch>
-                            <Route path="/users/:id" >
-                                <UserBlogs />
-                            </Route>
-                            <Route path="/users" >
-                                <UsersData />
-                            </Route>
-                            <Route path="/">
-                                <h2>Blogs</h2>
-                                <div>{blogForm()}</div>
-                                <BlogRender
-                                    blogs={blogs}
-                                    Blog={Blog}
-                                    user={user}
-                                />
-                            </Route>
-                        </Switch>
-                    </div>
-                }
+                    <Switch>
+                        <Route path="/users/:id" >
+                            <UserBlogs user={userData}/>
+                        </Route>
+                        <Route path="/users" >
+                            <UsersData />
+                        </Route>
+                        <Route path="/blogs/:id" >
+                            <Blog blog={blog} loggedUser={user} />
+                        </Route>
+                        <Route path="/">
+                            <h2>Blogs</h2>
+                            <div>{blogForm()}</div>
+                            <BlogRender
+                                blogs={blogs}
+                                Blog={Blog}
+                                user={user}
+                            />
+                        </Route>
+                    </Switch>
 
+                }
             </div>
-        </Router>
+        </div>
     )
 }
 

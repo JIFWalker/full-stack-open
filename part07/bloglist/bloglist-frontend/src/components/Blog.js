@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-import React, { useState } from 'react'
+import React from 'react'
 import { useDispatch } from 'react-redux'
 import { deleteBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
@@ -10,16 +9,15 @@ const Blog = ({ blog, loggedUser }) => {
     const blogStyle = {
         paddingTop: 10,
         paddingLeft: 2,
-        border: 'solid',
         borderWidth: 1,
-        marginBottom: 5
+        marginBottom: 10
     }
-    const [visibility, setVisibility] = useState(false)
-    const [blogOwnerID, setBlogOwnerID] = useState(JSON.stringify(blog.user))
-    const [userID, setUserID] = useState(JSON.stringify(loggedUser.id))
+    if (!blog) {
+        return null
+    }
 
-    const hideWhenVisible = { display: visibility ? 'none' : '' }
-    const showWhenVisible = { display: visibility ? '' : 'none' }
+    const blogOwnerID = JSON.stringify(blog.user)
+    const userID = JSON.stringify(loggedUser.id)
 
     const isAuthor = () => (blogOwnerID.includes(userID)) ? '' : 'none'
 
@@ -67,21 +65,17 @@ const Blog = ({ blog, loggedUser }) => {
 
         <div style={blogStyle}>
             <div key={blog.id} className='blog' >
-                <div className='titleAndAuthor' style={{ display: 'inline', paddingRight: 5 }}>
+                <h2 className='titleAndAuthor' style={{ display: 'inline', paddingRight: 5 }}>
                     {blog.title} -{blog.author}
-                </div>
+                </h2>
 
-                <button type='button' style={hideWhenVisible} onClick={() => setVisibility(true)}>view</button>
-                <button type='button' style={showWhenVisible} onClick={() => setVisibility(false)}>hide</button>
-
-                <div style={showWhenVisible} className='toggleableContent'>
-                    <p className='url' >{blog.url}</p>
+                <div>
+                    <a className='url' href={blog.url}>{blog.url}</a>
 
                     <div>
                         <p className='likes' style={{ display: 'inline', paddingRight: 5 }} >{blog.likes}</p>
                         <button type='button' className='likeButton'  onClick={() => likeButton(blog)}>like</button>
                     </div>
-
 
                     <button type='button' style={{ display: isAuthor() }} onClick={() => removeBlog(blog)}>remove</button>
                 </div>
@@ -92,3 +86,4 @@ const Blog = ({ blog, loggedUser }) => {
 }
 
 export default Blog
+

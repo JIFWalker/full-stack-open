@@ -1,4 +1,8 @@
+/* eslint-disable react/jsx-no-undef */
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const BlogRender = ({
     blogs,
@@ -21,15 +25,16 @@ const BlogRender = ({
     } else {
         return (
             <div id='blogs'>
-                { sortedBlogs.map(blog =>
-                    <Blog
-                        key = {blog.id}
-                        blog = {blog}
-                        loggedUser={user}
-                    />)
-                }
+                {sortedBlogs.map(blog => {
+                    return (
+                        <div key={blog.id}>
+                            <Link to={`/blogs/${blog.id}`} >
+                                {blog.title}
+                            </Link>
+                        </div>
+                    )
+                })}
             </div>
         )}
 }
-
 export default BlogRender
