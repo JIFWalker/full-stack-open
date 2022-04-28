@@ -27,7 +27,6 @@ const create = async newObject => {
 }
 
 const update = async updatedBlog => {
-    console.log('service', updatedBlog.id)
     const config = {
         headers: { Authorization: token },
     }
@@ -50,5 +49,5 @@ export default {
     getBlog,
     create,
     update,
-    remove
+    remove,
 }

@@ -26,6 +26,18 @@ const reducer = (state = [], action) => {
         return state.filter(blog => blog.id !== id)
     }
 
+    case 'blog/comment':
+    {
+        const id = action.payload.id
+        const blogToComment = state.find(blog => blog.id === id)
+
+        const commentedBlog = {
+            ...blogToComment,
+            comments: action.payload.comments
+        }
+        return state.map(blog => blog.id !== id ? blog : commentedBlog)
+    }
+
     default:
         return state
     }
@@ -74,6 +86,24 @@ export const deleteBlog = (removedBlog) => {
         dispatch({
             type: 'blog/remove',
             payload: removedBlog
+        })
+    }
+}
+
+export const addComment = (blog, comment) => {
+    return async dispatch => {
+        const commentedBlog = {
+            author: blog.author,
+            id: blog.id,
+            likes: blog.likes,
+            title: blog.title,
+            url: blog.url,
+            comments: blog.comments.concat([comment])
+        }
+        await blogService.update(commentedBlog)
+        dispatch({
+            type: 'blog/comment',
+            payload: commentedBlog
         })
     }
 }

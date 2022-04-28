@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { deleteBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
-import { updateLikes } from '../reducers/blogReducer'
+import { updateLikes, addComment } from '../reducers/blogReducer'
 
 const Blog = ({ blog, loggedUser }) => {
     const dispatch = useDispatch()
+    const [newComment, setNewComment] = useState('')
     const blogStyle = {
         paddingTop: 10,
         paddingLeft: 2,
@@ -18,6 +19,7 @@ const Blog = ({ blog, loggedUser }) => {
 
     const blogOwnerID = JSON.stringify(blog.user)
     const userID = JSON.stringify(loggedUser.id)
+
 
     const isAuthor = () => (blogOwnerID.includes(userID)) ? '' : 'none'
 
@@ -61,6 +63,34 @@ const Blog = ({ blog, loggedUser }) => {
         }
     }
 
+    const commentList = (blog.comments) ? (blog.comments.map( comment => {
+        return (
+            <li key={comment}>{comment}</li>
+        )
+    })) : null
+
+    const handleChange = (event) => {
+        event.preventDefault()
+        const value = event.target.value
+        setNewComment(value)
+    }
+
+    const handleComment = () => {
+        try {
+            dispatch(
+                addComment(blog, newComment)
+            )
+
+
+        } catch (exception) {
+            dispatch(
+                setNotification(
+                    [exception.toString(), 'error'], 10)
+            )
+        }
+    }
+
+
     return(
 
         <div style={blogStyle}>
@@ -79,6 +109,23 @@ const Blog = ({ blog, loggedUser }) => {
 
                     <button type='button' style={{ display: isAuthor() }} onClick={() => removeBlog(blog)}>remove</button>
                 </div>
+
+
+                <h2>Comments</h2>
+
+                <form onSubmit={handleComment}>
+                    <input
+                        id='comment'
+                        type='text'
+                        name='comment'
+                        onChange={handleChange}
+                    />
+                    <button id='create' type='submit'>Add Comment</button>
+                </form>
+
+                {commentList}
+
+
             </div>
 
         </div>
