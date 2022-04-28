@@ -3,6 +3,7 @@
 /* eslint-disable no-unused-vars */
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { ListGroup } from 'react-bootstrap'
 
 const BlogRender = ({
     blogs,
@@ -25,15 +26,17 @@ const BlogRender = ({
     } else {
         return (
             <div id='blogs'>
-                {sortedBlogs.map(blog => {
-                    return (
-                        <div key={blog.id}>
-                            <Link to={`/blogs/${blog.id}`} >
-                                {blog.title}
-                            </Link>
-                        </div>
-                    )
-                })}
+                <ListGroup>
+                    {sortedBlogs.map(blog => {
+                        return (
+                            <ListGroup.Item key={blog.id}>
+                                <Link to={`/blogs/${blog.id}`} >
+                                    {blog.title}
+                                </Link>
+                            </ListGroup.Item>
+                        )
+                    })}
+                </ListGroup>
             </div>
         )}
 }

@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { createBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
+import { Form, Button } from 'react-bootstrap'
 
 const AddBlog = () => {
     const dispatch = useDispatch()
@@ -45,39 +46,39 @@ const AddBlog = () => {
     return (
         <div>
             <h2>Create New</h2>
-            <form onSubmit={addBlog}>
-                <div>
-        Title:
-                    <input
+            <Form onSubmit={addBlog}>
+                <Form.Group>
+                    <Form.Label>Title:</Form.Label>
+                    <Form.Control
                         id='title'
                         type='text'
                         value={newBlog.title}
                         name='title'
                         onChange={handleChange}
                     />
-                </div>
-                <div>
-        Author
-                    <input
+                </Form.Group>
+                <Form.Group>
+                    <Form.Label>Author:</Form.Label>
+                    <Form.Control
                         id='author'
                         type='text'
                         value={newBlog.author}
                         name='author'
                         onChange={handleChange}
                     />
-                </div>
-                <div>
-        url
-                    <input
+                </Form.Group>
+                <Form.Group>
+                    <Form.Label>URL:</Form.Label>
+                    <Form.Control
                         id='url'
                         type='text'
                         value={newBlog.url}
                         name='url'
                         onChange={handleChange}
                     />
-                </div>
-                <button id='create' type='submit'>create</button>
-            </form>
+                </Form.Group>
+                <Button id='create' type='submit'>create</Button>
+            </Form>
         </div>
     )
 }

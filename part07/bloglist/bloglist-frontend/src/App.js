@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { BrowserRouter as Router, useRouteMatch,
     Switch, Route, Link, withRouter
 } from 'react-router-dom'
+import { Button, Navbar, Nav, Container } from 'react-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
 import { initializeBlogs } from './reducers/blogReducer'
@@ -25,7 +26,8 @@ import UserBlogs from './components/UserBlogs'
 const App = () => {
 
     const padding = {
-        padding: 5
+        padding: 5,
+        color: 'white'
     }
 
     const dispatch = useDispatch()
@@ -77,18 +79,31 @@ const App = () => {
         : null
 
     return (
-        <div>
-            <div>
-                <Link style={padding} to="/">Home</Link>
-                <Link style={padding} to='/users'>Users</Link>
-                {user
-                    ? <div style={padding}>
-                        <em>{user.name} logged in</em>
-                        <button onClick={handleLogout}>logout</button>
-                    </div>
-                    : <Link style={padding} to="/login">Login</Link>
-                }
-            </div>
+        <div className='container'>
+            <Navbar collapseOnSelect expand='lg' bg='dark' variant='dark'>
+                <Container>
+                    <Navbar.Toggle aria-controls='responsive-navbar-nav' />
+                    <Navbar.Collapse id='responsive-navbar-nav'>
+                        <Nav className='me-auto'>
+
+                            <Nav.Link as='span'>
+                                <Link style={padding} to="/">Home</Link>
+                            </Nav.Link>
+                            <Nav.Link as='span'>
+                                <Link style={padding} to='/users'>Users</Link>
+                            </Nav.Link>
+
+                            {user
+                                ? <div style={padding}>
+                                    <em>{user.name} is logged in </em>
+                                    <Button size='sm' variant='danger' onClick={handleLogout}>logout</Button>
+                                </div>
+                                : <Link to="/login">Login</Link>
+                            }
+                        </Nav>
+                    </Navbar.Collapse>
+                </Container>
+            </Navbar>
 
             <div>
                 <ShowMessage />

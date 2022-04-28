@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Button, ListGroup, Form } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
 import { deleteBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
@@ -65,7 +66,7 @@ const Blog = ({ blog, loggedUser }) => {
 
     const commentList = (blog.comments) ? (blog.comments.map( comment => {
         return (
-            <li key={comment}>{comment}</li>
+            <ListGroup.Item key={comment}>{comment}</ListGroup.Item>
         )
     })) : null
 
@@ -104,26 +105,29 @@ const Blog = ({ blog, loggedUser }) => {
 
                     <div>
                         <p className='likes' style={{ display: 'inline', paddingRight: 5 }} >{blog.likes}</p>
-                        <button type='button' className='likeButton'  onClick={() => likeButton(blog)}>like</button>
+                        <Button type='Button' className='likeButton' size='sm'  onClick={() => likeButton(blog)}>like</Button>
                     </div>
 
-                    <button type='button' style={{ display: isAuthor() }} onClick={() => removeBlog(blog)}>remove</button>
+                    <Button type='Button' style={{ display: isAuthor(), marginTop: 10, padding: 5 }} size='sm' variant='danger' onClick={() => removeBlog(blog)}>remove</Button>
                 </div>
 
 
                 <h2>Comments</h2>
 
-                <form onSubmit={handleComment}>
-                    <input
+                <Form onSubmit={handleComment}>
+                    <Form.Control
                         id='comment'
                         type='text'
                         name='comment'
                         onChange={handleChange}
                     />
-                    <button id='create' type='submit'>Add Comment</button>
-                </form>
+                    <Button id='create' size='sm' type='submit'>Add Comment</Button>
+                </Form>
 
-                {commentList}
+                <ListGroup>
+                    {commentList}
+                </ListGroup>
+
 
 
             </div>
