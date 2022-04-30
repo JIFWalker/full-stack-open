@@ -103,6 +103,15 @@ const typeDefs = gql`
       bookCount: Int!
   }
 
+  type Mutation {
+    addBook(
+      title: String!
+      author: String!
+      published: Int
+      genres: [String!]!
+    ): Book
+  }
+
   type Query {
       bookCount: Int!
       authorCount: Int!
@@ -135,6 +144,18 @@ const resolvers = {
         b.author === root.name
       ).length,
   },
+  Mutation: {
+    addBook: (root, args) => {
+      const book = {...args}
+      books = books.concat(book)
+      if (!authors.filter(a => 
+        a.name.includes(args.author)).length > 0) {
+        authors = authors.concat(
+          {name: args.author}
+        )}
+      return book
+    }
+  }
 }
 
 const server = new ApolloServer({
