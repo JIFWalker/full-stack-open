@@ -178,6 +178,9 @@ const resolvers = {
               }
 
             if (!author) {
+                if (args.author.length < 4) {
+                    throw new UserInputError('Author name is too short')
+                }
                 author = new Author({ name: args.author })
                 await author.save()
             }
