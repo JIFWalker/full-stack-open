@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState } from 'react'
 import { useQuery } from '@apollo/client'
 
@@ -9,6 +10,7 @@ import { ALL_AUTHORS, ALL_BOOKS, } from './queries'
 
 
 const App = () => {
+  const [token, setToken] = useState(null) 
   const results = useQuery(ALL_AUTHORS)
   const books = useQuery(ALL_BOOKS)
   const [page, setPage] = useState('authors')
@@ -16,6 +18,17 @@ const App = () => {
   if (results.loading || books.loading) {
     return <div>loading...</div>
   }
+  console.log(books.data)
+  // if (!token) {
+  //   return (
+  //     <div>
+  //       <h2>Login</h2>
+  //       <LoginForm
+  //       setToken={setToken}
+  //       />
+  //     </div>
+  //   )
+  // }
 
   return (
     <div>
