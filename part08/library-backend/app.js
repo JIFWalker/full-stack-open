@@ -196,6 +196,10 @@ const resolvers = {
         Book.find({ author: root.id }).countDocuments()
   },
 
+  Book: {
+    author: async (root) => Author.findOne({ _id: root.author})
+  },
+
   Mutation: {
     addBook: async (root, args, { currentUser }) => {
 
