@@ -218,7 +218,7 @@ const resolvers = {
                 if (args.author.length < 4) {
                     throw new UserInputError('Author name is too short')
                 }
-                author = new Author({ name: args.author })
+                author = new Author({ name: args.author, favoriteGenre: args.favoriteGenre })
                 await author.save()
             }
 
