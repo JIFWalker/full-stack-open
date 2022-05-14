@@ -29,11 +29,11 @@ const App = () => {
 
 
 
-  if (!token) {
-    return (
-      <LoginForm show={page === 'login'} setToken={setToken} />
-    )
-  }
+  // if (!token) {
+  //   return (
+  //     <LoginForm show={page === 'login'} setToken={setToken} />
+  //   )
+  // }
 
   return (
     <div>

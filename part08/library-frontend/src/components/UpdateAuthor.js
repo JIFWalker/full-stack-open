@@ -25,7 +25,7 @@ const UpdateAuthor = ({ authors }) => {
                 <div>
                     name
                     <select value={name} onChange={({ target }) => setName(target.value)}>
-                        {authors.map(a => {return (<option value={a.name}>{a.name}</option>)})}
+                        {authors.map(a => {return (<option key={a.name} value={a.name}>{a.name}</option>)})}
                     </select >
                 </div>
                 <div>
